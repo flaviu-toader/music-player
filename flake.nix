@@ -2,7 +2,7 @@
   description = "Music Player - An extensible music server written in Rust 🚀🎵✨";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     crane = {
       url = "github:ipetkov/crane";
@@ -32,7 +32,7 @@
 
         inherit (pkgs) lib;
 
-        craneLib = crane.lib.${system};
+        craneLib = crane.mkLib (import nixpkgs { inherit system; });
         
         protoFilter = path: _type: builtins.match ".*proto$" path != null;
         protoOrCargo = path: type:
@@ -50,7 +50,7 @@
 
           buildInputs = [
             # Add additional build inputs here
-            pkgs.pkgconfig
+            pkgs.pkg-config
             pkgs.gnumake
             pkgs.protobuf
             pkgs.zstd
